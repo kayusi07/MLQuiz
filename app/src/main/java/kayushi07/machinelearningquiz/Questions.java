@@ -1,15 +1,21 @@
 package kayushi07.machinelearningquiz;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.material.snackbar.Snackbar;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,7 +29,7 @@ import java.util.Collections;
 public class Questions extends AppCompatActivity {
     DonutProgress donutProgress;
     int variable =0;
-    TextView ques;
+    TextView ques, desc;
     Button OptA, OptB, OptC, OptD;
     Button play_button;
     String get;
@@ -32,6 +38,7 @@ public class Questions extends AppCompatActivity {
     String global = null, Ques, Opta, Optb, Optc, Optd;
     ArrayList<Integer> list = new ArrayList<Integer>();
     Toast toast;
+    private AdView mAdView;
     MediaPlayer mediaPlayer;
 
     @Override
@@ -41,8 +48,18 @@ public class Questions extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mAdView = (AdView) findViewById(R.id.adView2);
+
+        try {
+            AdRequest adRequest = new AdRequest.Builder()
+                    .build();
+            mAdView.loadAd(adRequest);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         SharedPreferences shared = getSharedPreferences("Score", Context.MODE_PRIVATE);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();//recieving the intent send by the Navigation activity
         get = intent.getStringExtra(Navigation_Activity.Message);//converting that intent message to string using the getStringExtra() method
@@ -68,6 +85,7 @@ public class Questions extends AppCompatActivity {
         OptD = (Button) findViewById(R.id.OptionD);
         ques = (TextView) findViewById(R.id.Questions);
         play_button = (Button) findViewById(R.id.play_button);//Play button to start the game
+        desc = (TextView) findViewById(R.id.desc);
 
     }
 
@@ -82,16 +100,16 @@ public class Questions extends AppCompatActivity {
             OptC.setVisibility(View.VISIBLE);
             OptD.setVisibility(View.VISIBLE);
             play_button.setVisibility(View.GONE);
+            desc.setVisibility(View.GONE);
             donutProgress.setVisibility(View.VISIBLE);
             visibility = 1;
-            new CountDownTimer(50000, 1000) {//countdowntimer
+            new CountDownTimer(100000, 1000) {//countdowntimer
                 int i = 100;
 
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    i = i - 2;
+                    i = i - 1;
                     donutProgress.setProgress(i);
-
 
                 }
 
@@ -119,43 +137,155 @@ public class Questions extends AppCompatActivity {
             if (global.equals("A")) {
                 if (v.getId() == R.id.OptionA) {
                     //Here we use the snackbar because if we use the toast then they will be stacked an user cannot idetify which questions answer is it showing
-                    Snackbar.make(v, "         Correct ☺", Snackbar.LENGTH_SHORT).show();
+//                    Snackbar.make(v, "         Correct ☺", Snackbar.LENGTH_SHORT).show();
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setIcon(R.drawable.corr)
+                            .setTitle("Correct!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // FIRE ZE MISSILES!
+
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+                    builder.create();
+                    builder.show();
 
                     l++;
                 } else {
-                    Snackbar.make(v, "Incorrect\t      Answer :" + Opta + "", Snackbar.LENGTH_SHORT).show();
+//                    Snackbar.make(v, "Incorrect\t      Answer :" + Opta + "", Snackbar.LENGTH_SHORT).show();
+
+                    String an = "Answer is \n"+ Opta;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(an)
+                            .setIcon(R.drawable.cross)
+                            .setTitle("Wrong!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // FIRE ZE MISSILES!
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+                    builder.create();
+                    builder.show();
+
                 }
 
             } else if (global.equals("B")) {
                 if (v.getId() == R.id.OptionB) {
-                    Snackbar.make(v, "          Correct ☺", Snackbar.LENGTH_SHORT).show();
+//                    Snackbar.make(v, "          Correct ☺", Snackbar.LENGTH_SHORT).show();
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setIcon(R.drawable.corr)
+                            .setTitle("Correct!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // FIRE ZE MISSILES!
+
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+                    builder.create();
+                    builder.show();
+
+
                     l++;
                 } else {
-                    Snackbar.make(v, "Incorrect\t      Answer :" + Optb + "", Snackbar.LENGTH_SHORT).show();
+//                    Snackbar.make(v, "Incorrect\t      Answer :" + Optb + "", Snackbar.LENGTH_SHORT).show();
+
+                    String an = "Answer is \n"+ Optb;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(an)
+                            .setIcon(R.drawable.cross)
+                            .setTitle("Wrong!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // FIRE ZE MISSILES!
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+                    builder.create();
+                    builder.show();
                 }
 
             } else if (global.equals("C")) {
                 if (v.getId() == R.id.OptionC) {
 
-                    Snackbar.make(v, "         Correct ☺", Snackbar.LENGTH_SHORT).show();
+//                    Snackbar.make(v, "         Correct ☺", Snackbar.LENGTH_SHORT).show();
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setIcon(R.drawable.corr)
+                            .setTitle("Correct!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // FIRE ZE MISSILES!
+
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+                    builder.create();
+                    builder.show();
+
+
                     l++;
                 } else {
-                    Snackbar.make(v, "Incorrect\tAnswer :" + Optc + "", Snackbar.LENGTH_SHORT).show();
+//                    Snackbar.make(v, "Incorrect\tAnswer :" + Optc + "", Snackbar.LENGTH_SHORT).show();
+                    String an = "Answer is \n"+ Optc;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(an)
+                            .setIcon(R.drawable.cross)
+                            .setTitle("Wrong!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // FIRE ZE MISSILES!
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+                    builder.create();
+                    builder.show();
                 }
             } else if (global.equals("D")) {
                 if (v.getId() == R.id.OptionD) {
-                    Snackbar.make(v, "        Correct ☺", Snackbar.LENGTH_SHORT).show();
+//                    Snackbar.make(v, "        Correct ☺", Snackbar.LENGTH_SHORT).show();
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setIcon(R.drawable.corr)
+                            .setTitle("Correct!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // FIRE ZE MISSILES!
+
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+                    builder.create();
+                    builder.show();
+
                     l++;
                 } else {
 
-                    Snackbar.make(v, "Incorrect\tAnswer :" + Optd + "", Snackbar.LENGTH_SHORT).show();
+//                    Snackbar.make(v, "Incorrect\tAnswer :" + Optd + "", Snackbar.LENGTH_SHORT).show();
+                    String an = "Answer is \n"+ Optd;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(an)
+                            .setIcon(R.drawable.cross)
+                            .setTitle("Wrong!")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // FIRE ZE MISSILES!
+                                }
+                            });
+                    // Create the AlertDialog object and return it
+                    builder.create();
+                    builder.show();
                 }
             }
         }
         if (get.equals("c1")) {
 
             if (c1 == 0) {
-                for (i = 1; i < 35; i++) {
+                for (i = 1; i < 58; i++) {
                     list.add(new Integer(i));
                 }
                 Collections.shuffle(list);
@@ -178,6 +308,9 @@ public class Questions extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        if (mAdView != null) {
+            mAdView.pause();
+        }
         super.onPause();
         variable =1;
     }
@@ -193,5 +326,22 @@ public class Questions extends AppCompatActivity {
         super.onBackPressed();
         variable = 1;
         finish();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdView != null) {
+            mAdView.resume();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mAdView != null) {
+            mAdView.destroy();
+        }
+
+        super.onDestroy();
     }
 }
